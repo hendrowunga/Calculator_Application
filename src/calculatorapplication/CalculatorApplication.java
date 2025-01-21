@@ -3,12 +3,10 @@ package calculatorapplication;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
+import java.text.DecimalFormat;
 
 public class CalculatorApplication implements ActionListener {
 
-    public static void main(String[] args) {
-        CalculatorApplication calculator = new CalculatorApplication();
-    }
     double num1 = 0, num2 = 0;
     int calculation;
     double result;
@@ -16,7 +14,7 @@ public class CalculatorApplication implements ActionListener {
     JLabel label = new JLabel();
     JTextField textField = new JTextField();
     JRadioButton onRadioButton = new JRadioButton("on");
-    JRadioButton offRadioButton = new JRadioButton("of");
+    JRadioButton offRadioButton = new JRadioButton("off");
     JButton button0 = new JButton("0");
     JButton button1 = new JButton("1");
     JButton button2 = new JButton("2");
@@ -39,8 +37,14 @@ public class CalculatorApplication implements ActionListener {
     JButton buttonReciprocalt = new JButton("1/x");
     JButton buttonSqrt = new JButton("\u221A");
 
+    // Konstanta warna untuk tampilan modern
+    private static final Color COLOR_PRIMARY = new Color(40, 40, 40); // Abu-abu gelap
+    private static final Color COLOR_SECONDARY = new Color(50, 50, 50); // Abu-abu sedikit lebih terang
+    private static final Color COLOR_ACCENT = new Color(239, 188, 2); // Kuning terang
+    private static final Color COLOR_TEXT = Color.WHITE;
+
     CalculatorApplication() {
-        this.prepareGui();
+        prepareGui();
         addComponents();
         addActionEventListener();
     }
@@ -48,7 +52,7 @@ public class CalculatorApplication implements ActionListener {
     public void prepareGui() {
         frame.setSize(305, 510);
         frame.getContentPane().setLayout(null);
-        frame.getContentPane().setBackground(Color.blue);
+        frame.getContentPane().setBackground(COLOR_PRIMARY);
         frame.setLocationRelativeTo(null);
         frame.setVisible(true);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -56,126 +60,142 @@ public class CalculatorApplication implements ActionListener {
 
     public void addComponents() {
         label.setBounds(250, 0, 50, 50);
-        label.setForeground(Color.white);
+        label.setForeground(COLOR_ACCENT); // Warna teks label
+        label.setFont(new Font("Arial", Font.BOLD, 14));
         frame.add(label);
+
         textField.setBounds(10, 40, 270, 40);
-        textField.setFont(new Font("Arisal", Font.BOLD, 20));
+        textField.setFont(new Font("Arial", Font.BOLD, 20));
         textField.setEditable(false);
         textField.setHorizontalAlignment(SwingConstants.RIGHT);
+        textField.setBackground(COLOR_SECONDARY); // Warna latar belakang textField
+        textField.setForeground(COLOR_TEXT); // Warna teks textField
+        textField.setCaretColor(COLOR_TEXT); // Warna kursor textField
         frame.add(textField);
+
         onRadioButton.setBounds(10, 95, 60, 40);
         onRadioButton.setSelected(true);
         onRadioButton.setFont(new Font("Arial", Font.BOLD, 14));
-        onRadioButton.setBackground(Color.black);
-        onRadioButton.setForeground(Color.white);
+        onRadioButton.setBackground(COLOR_PRIMARY);
+        onRadioButton.setForeground(COLOR_TEXT);
         onRadioButton.setFocusable(false);
         frame.add(onRadioButton);
+
         offRadioButton.setBounds(10, 120, 60, 40);
         offRadioButton.setSelected(false);
         offRadioButton.setFont(new Font("Arial", Font.BOLD, 14));
-        offRadioButton.setBackground(Color.black);
-        offRadioButton.setForeground(Color.white);
+        offRadioButton.setBackground(COLOR_PRIMARY);
+        offRadioButton.setForeground(COLOR_TEXT);
         offRadioButton.setFocusable(false);
         frame.add(offRadioButton);
-        ButtonGroup buttongroup = new ButtonGroup();
-        buttongroup.add(onRadioButton);
-        buttongroup.add(offRadioButton);
+
+        ButtonGroup buttonGroup = new ButtonGroup();
+        buttonGroup.add(onRadioButton);
+        buttonGroup.add(offRadioButton);
+
+        // Tombol Angka
         button7.setBounds(10, 230, 60, 40);
-        button7.setFont(new Font("Arial", Font.BOLD, 20));
-        button7.setFocusable(false);
+        applyStyleToButton(button7);
         frame.add(button7);
+
         button8.setBounds(80, 230, 60, 40);
-        button8.setFont(new Font("Arial", Font.BOLD, 20));
-        button8.setFocusable(false);
+        applyStyleToButton(button8);
         frame.add(button8);
+
         button9.setBounds(150, 230, 60, 40);
-        button9.setFont(new Font("Arial", Font.BOLD, 20));
-        button9.setFocusable(false);
+        applyStyleToButton(button9);
         frame.add(button9);
+
         button4.setBounds(10, 290, 60, 40);
-        button4.setFont(new Font("Arial", Font.BOLD, 20));
-        button4.setFocusable(false);
+        applyStyleToButton(button4);
         frame.add(button4);
+
         button5.setBounds(80, 290, 60, 40);
-        button5.setFont(new Font("Arial", Font.BOLD, 20));
-        button5.setFocusable(false);
+        applyStyleToButton(button5);
         frame.add(button5);
+
         button6.setBounds(150, 290, 60, 40);
-        button6.setFont(new Font("Arial", Font.BOLD, 20));
-        button6.setFocusable(false);
+        applyStyleToButton(button6);
         frame.add(button6);
+
         button1.setBounds(10, 350, 60, 40);
-        button1.setFont(new Font("Arial", Font.BOLD, 20));
-        button1.setFocusable(false);
+        applyStyleToButton(button1);
         frame.add(button1);
+
         button2.setBounds(80, 350, 60, 40);
-        button2.setFont(new Font("Arial", Font.BOLD, 20));
-        button2.setFocusable(false);
+        applyStyleToButton(button2);
         frame.add(button2);
+
         button3.setBounds(150, 350, 60, 40);
-        button3.setFont(new Font("Arial", Font.BOLD, 20));
-        button3.setFocusable(false);
+        applyStyleToButton(button3);
         frame.add(button3);
-        buttonDot.setBounds(150, 410, 60, 40);
-        buttonDot.setFont(new Font("Arial", Font.BOLD, 20));
-        buttonDot.setFocusable(false);
-        frame.add(buttonDot);
+
         button0.setBounds(10, 410, 130, 40);
-        button0.setFont(new Font("Arial", Font.BOLD, 20));
-        button0.setFocusable(false);
+        applyStyleToButton(button0);
         frame.add(button0);
+
+        buttonDot.setBounds(150, 410, 60, 40);
+        applyStyleToButton(buttonDot);
+        frame.add(buttonDot);
+
+        // Tombol Operasi
         buttonEquals.setBounds(220, 350, 60, 100);
-        buttonEquals.setFont(new Font("Arial", Font.BOLD, 20));
-        buttonEquals.setBackground(new Color(239, 188, 2));
-        buttonEquals.setFocusable(false);
+        applyStyleToButton(buttonEquals);
         frame.add(buttonEquals);
-        buttonSqrt.setBounds(10, 170, 60, 40);
-        buttonSqrt.setFont(new Font("Arial", Font.BOLD, 18));
-        buttonSqrt.setFocusable(false);
-        frame.add(buttonSqrt);
-        buttonSquare.setBounds(80, 170, 60, 40);
-        buttonSquare.setFont(new Font("Arial", Font.BOLD, 20));
-        buttonSqrt.setFocusable(false);
-        frame.add(buttonSquare);
-        buttonMinus.setBounds(220, 170, 60, 40);
-        buttonMinus.setFont(new Font("Arial", Font.BOLD, 20));
-        buttonMinus.setBackground(new Color(239, 188, 2));
-        buttonMinus.setFocusable(false);
-        frame.add(buttonMinus);
+
         buttonPlus.setBounds(220, 290, 60, 40);
-        buttonPlus.setFont(new Font("Arial", Font.BOLD, 20));
-        buttonPlus.setBackground(new Color(239, 188, 2));
-        buttonPlus.setFocusable(false);
+        applyStyleToButton(buttonPlus);
         frame.add(buttonPlus);
-        buttonDiv.setBounds(220, 110, 60, 40);
-        buttonDiv.setFont(new Font("Arial", Font.BOLD, 20));
-        buttonDiv.setBackground(new Color(239, 188, 2));
-        buttonDiv.setFocusable(false);
-        frame.add(buttonDiv);
+
+        buttonMinus.setBounds(220, 170, 60, 40);
+        applyStyleToButton(buttonMinus);
+        frame.add(buttonMinus);
+
         buttonMul.setBounds(220, 230, 60, 40);
-        buttonMul.setFont(new Font("Arial", Font.BOLD, 20));
-        buttonMul.setBackground(new Color(239, 188, 2));
-        buttonMul.setFocusable(false);
+        applyStyleToButton(buttonMul);
         frame.add(buttonMul);
+
+        buttonDiv.setBounds(220, 110, 60, 40);
+        applyStyleToButton(buttonDiv);
+        frame.add(buttonDiv);
+
+        // Tombol Fungsi Khusus
+        buttonSqrt.setBounds(10, 170, 60, 40);
+        applyStyleToButton(buttonSqrt);
+        frame.add(buttonSqrt);
+
+        buttonSquare.setBounds(80, 170, 60, 40);
+        applyStyleToButton(buttonSquare);
+        frame.add(buttonSquare);
+
         buttonReciprocalt.setBounds(150, 170, 60, 40);
-        buttonReciprocalt.setFont(new Font("Arial", Font.BOLD, 15));
-        buttonReciprocalt.setFocusable(false);
+        applyStyleToButton(buttonReciprocalt);
         frame.add(buttonReciprocalt);
 
+        // Tombol Clear dan Delete
         buttonDelete.setBounds(150, 110, 60, 40);
-        buttonDelete.setFont(new Font("Arial", Font.BOLD, 12));
-        buttonDelete.setBackground(Color.red);
-        buttonDelete.setForeground(Color.white);
-        buttonDelete.setFocusable(false);
+        applyStyleToSpecialButton(buttonDelete);
         frame.add(buttonDelete);
 
         buttonClear.setBounds(80, 110, 60, 40);
-        buttonClear.setFont(new Font("Arial", Font.BOLD, 12));
-        buttonClear.setBackground(Color.red);
-        buttonClear.setForeground(Color.white);
-        buttonClear.setFocusable(false);
+        applyStyleToSpecialButton(buttonClear);
         frame.add(buttonClear);
+    }
 
+    // Method untuk menerapkan style pada tombol standar
+    private void applyStyleToButton(JButton button) {
+        button.setBackground(COLOR_SECONDARY);
+        button.setForeground(COLOR_TEXT);
+        button.setFont(new Font("Arial", Font.BOLD, 20));
+        button.setFocusable(false);
+    }
+
+    // Method untuk menerapkan style pada tombol spesial (C, DEL)
+    private void applyStyleToSpecialButton(JButton button) {
+        button.setBackground(new Color(180, 0, 0)); // Merah tua untuk tombol spesial
+        button.setForeground(COLOR_TEXT);
+        button.setFont(new Font("Arial", Font.BOLD, 12));
+        button.setFocusable(false);
     }
 
     public void addActionEventListener() {
@@ -278,8 +298,9 @@ public class CalculatorApplication implements ActionListener {
                 back.deleteCharAt(number);
                 textField.setText(back.toString());
             }
-            if (textField.getText().endsWith(""));
-            label.setText("");
+            if (textField.getText().endsWith("")) {
+                label.setText("");
+            }
 
         } else if (source == button0) {
             if (textField.getText().equals("0")) {
@@ -344,13 +365,12 @@ public class CalculatorApplication implements ActionListener {
             String string = Double.toString(square);
             if (string.endsWith(".0")) {
                 textField.setText(string.replace(".0", ""));
-
             } else {
                 textField.setText(string);
             }
 
         } else if (source == buttonSqrt) {
-            num1 = Integer.parseInt(textField.getText());
+            num1 = Double.parseDouble(textField.getText()); // Perbaikan: Gunakan Double.parseDouble
             double sqrt = Math.sqrt(num1);
             textField.setText(Double.toString(sqrt));
         } else if (source == buttonReciprocalt) {
@@ -359,7 +379,6 @@ public class CalculatorApplication implements ActionListener {
             String string = Double.toString(reciprocalt);
             if (string.endsWith(".0")) {
                 textField.setText(string.replace(".0", ""));
-
             } else {
                 textField.setText(string);
             }
@@ -379,19 +398,23 @@ public class CalculatorApplication implements ActionListener {
                 case 4:
                     result = num1 / num2;
                     break;
-
+                default:
+                    result = 0; // Menangani kasus jika calculation tidak memiliki nilai yang valid
+                    break;
             }
+            // Gunakan DecimalFormat untuk tampilan angka yang lebih baik
+            DecimalFormat df = new DecimalFormat("#.##########");
             if (Double.toString(result).endsWith(".0")) {
-                textField.setText(Double.toString(result).replace(".0", ""));
+                textField.setText(df.format(result).replace(".0", ""));
             } else {
-                textField.setText(Double.toString(result));
+                textField.setText(df.format(result));
             }
             label.setText("");
             num1 = result;
-
         }
     }
 
-    
-
+    public static void main(String[] args) {
+        CalculatorApplication calculator = new CalculatorApplication();
+    }
 }
